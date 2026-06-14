@@ -1,6 +1,17 @@
 # PeopleFlow Employees API
 
-API REST desarrollada con **FastAPI** y **MongoDB** para la gestión de empleados.
+API REST desarrollada con FastAPI y MongoDB para la gestión de empleados.
+
+## Features
+
+* Employee CRUD
+* Employee salary average calculation
+* JWT Authentication
+* Swagger/OpenAPI documentation
+* MongoDB persistence
+* Docker support
+
+---
 
 ## Tecnologías utilizadas
 
@@ -80,10 +91,28 @@ app/
 
 ## Variables de entorno
 
-Crear un archivo `.env` en la raíz del proyecto.
+### Desarrollo local
+
+Crear un archivo `.env` en la raíz del proyecto:
 
 ```env
 MONGO_URI=mongodb://localhost:27017
+DATABASE_NAME=peopleflow
+
+JWT_SECRET_KEY=peopleflow_secret_2026
+JWT_ALGORITHM=HS256
+JWT_EXPIRE_MINUTES=60
+
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=admin123
+```
+
+### Docker
+
+El proyecto incluye un archivo `.env.docker` para la ejecución mediante Docker Compose.
+
+```env
+MONGO_URI=mongodb://mongo:27017
 DATABASE_NAME=peopleflow
 
 JWT_SECRET_KEY=peopleflow_secret_2026
@@ -101,8 +130,8 @@ ADMIN_PASSWORD=admin123
 ### Clonar repositorio
 
 ```bash
-git clone <repository-url>
-cd challengeleafnoise
+git clone https://github.com/FedeVazquez/ChallengeLeafnoise.git
+cd ChallengeLeafnoise
 ```
 
 ### Crear entorno virtual
@@ -113,7 +142,7 @@ python -m venv .venv
 
 ### Activar entorno virtual
 
-Windows PowerShell
+Windows PowerShell:
 
 ```powershell
 .venv\Scripts\Activate.ps1
@@ -135,10 +164,16 @@ uvicorn app.main:app --reload
 
 ## Ejecución con Docker
 
-### Levantar servicios
+### Construir y levantar servicios
 
 ```bash
 docker compose up --build
+```
+
+### Ejecutar en segundo plano
+
+```bash
+docker compose up -d --build
 ```
 
 ### Detener servicios
@@ -169,8 +204,6 @@ http://localhost:8000/openapi.json
 
 ### Login
 
-Endpoint:
-
 ```http
 POST /auth/login
 ```
@@ -195,10 +228,10 @@ Respuesta:
 
 ### Uso del token
 
-1. Ejecutar login.
-2. Copiar el token generado.
+1. Ejecutar el endpoint `/auth/login`.
+2. Copiar el token JWT generado.
 3. Presionar el botón **Authorize** en Swagger.
-4. Ingresar el token.
+4. Pegar el token.
 5. Consumir los endpoints protegidos.
 
 ---
@@ -226,6 +259,8 @@ Respuesta:
 
 ## Ejemplo de creación de empleado
 
+Request:
+
 ```json
 {
   "nombre": "Federico",
@@ -237,8 +272,42 @@ Respuesta:
 }
 ```
 
+Response:
+
+```json
+{
+  "id": "6a2ed3f3b2f0af2851aac808",
+  "nombre": "Federico",
+  "apellido": "Vazquez",
+  "email": "federico@gmail.com",
+  "puesto": "Backend Developer",
+  "salario": 10000,
+  "fecha_ingreso": "2026-06-14"
+}
+```
+
+---
+
+## Ejemplo de salario promedio
+
+Request:
+
+```http
+GET /employees/stats/salary-average
+```
+
+Response:
+
+```json
+{
+  "average_salary": 10000
+}
+```
+
 ---
 
 ## Autor
 
 Federico Vazquez Barbera
+
+Backend Developer
